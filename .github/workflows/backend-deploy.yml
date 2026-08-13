@@ -1,4 +1,4 @@
-name: Todo Frontend Deploy
+name: Todo Add Task Backend Deploy
 
 on:
   workflow_dispatch: 
@@ -8,7 +8,7 @@ permissions:
   contents: read
   
 env:
-  IMAGE_NAME: todo_frontend
+  IMAGE_NAME: todo_backend
   IMAGE_TAG: v1
   ACR_NAME: acrtodoappbappa
   ACR_LOGIN_SERVER: acrtodoappbappa.azurecr.io
@@ -40,30 +40,14 @@ jobs:
         run: |
           az acr login --name ${{ENV.ACR_NAME}}
 
-      - name: Build Docker Image
-        run: |
-          docker build -t ${{env.ACR_LOGIN_SERVER}}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} .
+      # - name: Build Docker Image
+      #   run: |
+      #     docker build -t ${{env.ACR_LOGIN_SERVER}}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} .
 
-      - name: Push Docker Image to ACR
-        run: |
-          docker push ${{env.ACR_LOGIN_SERVER}}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+      # - name: Push Docker Image to ACR
+      #   run: |
+      #     docker push ${{env.ACR_LOGIN_SERVER}}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
 
-      - name: Get AKS Credentials
-        run: |
-          az aks get-credentials --resource-group jaydeep_rg1 --name jaydeep-aks-cluster --overwrite-existing
-    
-      - name: Check AKS
-        run: |
-          kubectl get nodes
-
-      - name: Deploy frontend to AKS
-        run: |
-          kubectl apply -f manifest/1.namespaces.yml
-          kubectl apply -f manifest/2.deployment.yaml
-          kubectl apply -f manifest/3.service.yml
-          kubectl apply -f manifest/4.firfox.yaml
-          kubectl apply -f manifest/5.stgclass.yaml
-          kubectl apply -f manifest/6.pvc.yaml
 
 
 
